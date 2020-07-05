@@ -1,0 +1,5 @@
+.firebase
+functions/node_modules
+editor/node_modules
+public/edit
+functions/ui-debug.log

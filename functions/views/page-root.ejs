@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title><%- data.setting.siteName %></title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+</head>
+
+<body>
+  <%- include("./header.ejs", data) %>
+  <%- include("./navigation.ejs", data) %>
+  <img class="eyecatch-image" src="<%- data.article.captionImage || data.setting.topImage %>" />
+  <%- include("./content.ejs", data) %>
+  <%- include("./footer.ejs", data) %>
+</body>
+
+</html>
