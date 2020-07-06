@@ -29,9 +29,7 @@
     <b-input-group prepend="キャプション画像">
       <ImageSelect v-model="draftItem.captionImage" />
     </b-input-group>
-    <b-input-group prepend="本文">
-      <b-input v-model="draftItem.content" />
-    </b-input-group>
+    <ContentEdit :articleId="draftItem.articleId" />
     <b-button @click="onClickAdd">add</b-button>
     <b-button @click="onClickDelete">delete</b-button>
   </div>
@@ -39,9 +37,11 @@
 
 <script>
 import ImageSelect from "@/components/ImageSelect.vue";
+import ContentEdit from "@/components/ContentEdit.vue";
 export default {
   components: {
-    ImageSelect
+    ImageSelect,
+    ContentEdit
   },
   data() {
     return {
@@ -63,8 +63,7 @@ export default {
         articleId: "",
         title: "",
         categoryId: "",
-        captionImage: "",
-        content: ""
+        captionImage: ""
       }
     };
   },
@@ -84,4 +83,5 @@ export default {
 </script>
 
 <style scoped>
+@import "~simplemde/dist/simplemde.min.css";
 </style>

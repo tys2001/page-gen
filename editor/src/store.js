@@ -102,7 +102,15 @@ export default {
         await fileRef.delete();
         await firestore.collection("media").doc(fileName).delete();
         this.loadMedia();
-      }
+      },
+      async getContent(articleId) {
+        const doc = await firestore.collection("article-content").doc(articleId).get();
+        if (doc.exists) return doc.data();
+        else return { markdown: "" };
+      },
+      async saveContent(articleId, data) {
+        await firestore.collection("article-content").doc(articleId).set(data);
+      },
     };
     await Promise.all([
       obj.loadArticles(),

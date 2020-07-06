@@ -3,14 +3,17 @@
 
 <head>
   <meta charset="UTF-8">
-  <title><%- data.setting.siteName %></title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="favicon.ico">
+  <title><%= data.setting.siteName %></title>
   <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 
 <body>
   <%- include("./header.ejs", data) %>
   <%- include("./navigation.ejs", data) %>
-  <img class="eyecatch-image" src="<%- data.article.captionImage || data.setting.topImage %>" />
+  <img class="eyecatch-image" src="<%= data.article.captionImage || data.setting.topImage %>" />
   <%- include("./content.ejs", data) %>
   <%- include("./footer.ejs", data) %>
 </body>
