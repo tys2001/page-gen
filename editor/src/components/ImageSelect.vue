@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="value" class="image-selected" />
+    <div class="thumbnail" :style="{ backgroundImage: `url(${value})` }" />
     <b-button @click="onClickOpen">select</b-button>
     <b-modal ref="modal" @ok="onClickOk" size="xl">
       <div class="thumbnails-box">

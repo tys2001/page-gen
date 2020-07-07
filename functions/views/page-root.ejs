@@ -8,12 +8,13 @@
   <link rel="icon" href="favicon.ico">
   <title><%= data.setting.siteName %></title>
   <link rel="stylesheet" type="text/css" href="/style.css">
+  <link rel="stylesheet" type="text/css" href="/content.css">
 </head>
 
 <body>
   <%- include("./header.ejs", data) %>
   <%- include("./navigation.ejs", data) %>
-  <img class="eyecatch-image" src="<%= data.article.captionImage || data.setting.topImage %>" />
+  <img class="top-image" src="<%= data.setting.topImage %>" />
   <%- include("./content.ejs", data) %>
   <%- include("./footer.ejs", data) %>
 </body>

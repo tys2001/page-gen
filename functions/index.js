@@ -2,7 +2,7 @@ const express = require("express");
 const firebase = require("firebase");
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const markdownIt = require('markdown-it')();
+const marked = require('marked');
 
 admin.initializeApp();
 firebase.initializeApp({
@@ -57,7 +57,7 @@ renderPage = async (articleId, res) => {
   const articleContentDoc = await firestore.collection("article-content").doc(articleId).get();
   if (!articleContentDoc.exists) res.redirect('/404');
   const markdown = articleContentDoc.data().markdown;
-  data.article.htmlContent = markdownIt.render(markdown);
+  data.article.htmlContent = marked(markdown);
 
   if (articleId === "404") res.status(404);
   res.render("./page-root.ejs", { data });

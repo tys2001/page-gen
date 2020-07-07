@@ -29,7 +29,13 @@
     <b-input-group prepend="キャプション画像">
       <ImageSelect v-model="draftItem.captionImage" />
     </b-input-group>
-    <ContentEdit :articleId="draftItem.articleId" />
+    <b-button @click="onClickEditContent" variant="primary" block>本文を編集する</b-button>
+    <MarkdownEditor
+      v-show="showMarkdownEditor"
+      v-model="draftContent.markdown"
+      @save="onClickSaveContent"
+      @exit="onClickExitEditor"
+    />
     <b-button @click="onClickAdd">add</b-button>
     <b-button @click="onClickDelete">delete</b-button>
   </div>
@@ -37,11 +43,11 @@
 
 <script>
 import ImageSelect from "@/components/ImageSelect.vue";
-import ContentEdit from "@/components/ContentEdit.vue";
+import MarkdownEditor from "@/components/MarkdownEditor.vue";
 export default {
   components: {
     ImageSelect,
-    ContentEdit
+    MarkdownEditor
   },
   data() {
     return {
@@ -64,6 +70,11 @@ export default {
         title: "",
         categoryId: "",
         captionImage: ""
+      },
+      showMarkdownEditor: false,
+      draftContent: {
+        markdown: "",
+        html: ""
       }
     };
   },
@@ -71,6 +82,17 @@ export default {
   methods: {
     onClickRow(item) {
       this.draftItem = JSON.parse(JSON.stringify(item));
+      this.showMarkdownEditor = false;
+    },
+    async onClickEditContent() {
+      this.draftContent = await this.store.getContent(this.draftItem.articleId);
+      this.showMarkdownEditor = true;
+    },
+    async onClickSaveContent() {
+      await this.store.saveContent(this.draftItem.articleId, this.draftContent);
+    },
+    onClickExitEditor() {
+      this.showMarkdownEditor = false;
     },
     async onClickAdd() {
       this.store.addArticle(this.draftItem);
@@ -83,5 +105,4 @@ export default {
 </script>
 
 <style scoped>
-@import "~simplemde/dist/simplemde.min.css";
 </style>
