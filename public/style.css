@@ -34,6 +34,7 @@ body {
 
 .navigation > a {
   width: 100%;
+  border-radius: 5px;
 }
 
 .navigation > a:hover {
@@ -60,7 +61,54 @@ body {
   display: block;
 }
 
+.related {
+  padding: 20px 5%;
+}
+
+.article-link-list {
+  display: grid;
+}
+
+.article-link {
+  padding: 10px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 5px;
+}
+
+.article-link:hover {
+  background-color: lightgray;
+}
+
+.article-link-image {
+  background-size: cover;
+  background-position: center;
+  padding-bottom: 75%;
+}
+
+.article-link-title{
+  height: 60px;
+  margin: 5px;
+  overflow: hidden;
+  line-height: 20px;
+  font-size: 14px;
+}
+
 .footer {
   height: 100px;
   background-color: gray;
+}
+
+/* wide */
+@media (min-width: 750px) {
+  .responsive-grid-column {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+/* closed */
+@media (max-width: 749px) {
+  .responsive-grid-column {
+    grid-template-columns: 1fr 1fr;
+  }
 }

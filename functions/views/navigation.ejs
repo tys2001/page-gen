@@ -1,5 +1,5 @@
 <div class="navigation">
-  <% for (let menuItem of data.menu) { %>
-  <a href="<%- menuItem.href %>"><%= menuItem.menuName %></a>
+  <% for (let menuItem of data.setting.menuItems) { %>
+  <a href="<%- menuItem.href %>"><%= menuItem.label %></a>
   <% } %>
 </div>

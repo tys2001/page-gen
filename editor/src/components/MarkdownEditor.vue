@@ -1,17 +1,18 @@
 <template>
-  <div class="mde-container" fullscreen>
+  <div v-show="shown" class="mde-container" fullscreen @keydown="onKeyDown">
     <div class="toolbar">
-      <div class="tool-icon" @click="$emit('save')">
+      <div class="tool-icon" @click="onClickSave">
         <b-icon icon="upload"></b-icon>
       </div>
-      <div class="tool-icon" @click="$emit('exit')">
+      <div class="tool-icon" @click="exit">
         <b-icon icon="door-closed"></b-icon>
       </div>
       <div class="tool-icon">
         <b-icon icon="image"></b-icon>
       </div>
+      <div class="message">{{message}}</div>
     </div>
-    <textarea :value="value" @input="$emit('input', $event.target.value)" class="writer" />
+    <textarea v-model="markdown" class="writer" />
     <div v-html="html" class="viewer content-body"></div>
   </div>
 </template>
@@ -20,18 +21,41 @@
 import marked from "marked";
 export default {
   props: {
-    value: String
+    articleId: String
   },
   data() {
     return {
       store: this.$store,
       shown: false,
-      html: ""
+      markdown: "",
+      html: "",
+      message: ""
     };
   },
-  methods: {},
+  methods: {
+    async open() {
+      this.shown = true;
+      const content = await this.store.getContent(this.articleId);
+      this.markdown = content.markdown;
+    },
+    exit() {
+      this.shown = false;
+    },
+    async onClickSave() {
+      await this.store.saveContent(this.articleId, { markdown: this.markdown });
+      this.message = `Saved at ${new Date().toLocaleString()}`;
+    },
+    onKeyDown() {
+      if (event.ctrlKey) {
+        if (event.key === "s") {
+          event.preventDefault();
+          this.onClickSave();
+        }
+      }
+    }
+  },
   watch: {
-    value(newValue) {
+    markdown(newValue) {
       this.html = marked(newValue);
     }
   }
@@ -74,6 +98,11 @@ export default {
 }
 .tool-icon:hover {
   background-color: lightgray;
+}
+.message {
+  margin-left: auto;
+  color: white;
+  line-height: 40px;
 }
 .writer {
   grid-column-start: 1;

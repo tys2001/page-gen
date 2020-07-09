@@ -44,20 +44,47 @@ app.use((req, res, next) => {
 renderPage = async (articleId, res) => {
   const data = {
     article: {},
-    menu: [],
     setting: {}
   };
-  const menuDocs = await firestore.collection("menu").orderBy("sortNo").get();
-  menuDocs.forEach(doc => data.menu.push(doc.data()));
   const settingDoc = await firestore.collection("settings").doc("setting").get();
   data.setting = settingDoc.data();
+
   const articleDoc = await firestore.collection("articles").doc(articleId).get();
   if (!articleDoc.exists) res.redirect('/404');
   data.article = articleDoc.data();
+
   const articleContentDoc = await firestore.collection("article-content").doc(articleId).get();
   if (!articleContentDoc.exists) res.redirect('/404');
   const markdown = articleContentDoc.data().markdown;
   data.article.htmlContent = marked(markdown);
+
+  for (let category of data.setting.categories) {
+    if (category.categoryId === data.article.categoryId) {
+      data.article.category = category;
+    }
+  }
+
+  if (data.article.category.categoryId === "others") {
+    for (let category of data.setting.categories) {
+      const categoryArticlesDoc = await firestore.collection("articles")
+        .where("categoryId", "==", category.categoryId)
+        //.orderBy("articleId").limit(8)
+        .get();
+      category.articles = [];
+      categoryArticlesDoc.forEach(doc => {
+        category.articles.push(doc.data());
+      });
+    }
+  } else {
+    const relatedArticlesDoc = await firestore.collection("articles")
+      .where("categoryId", "==", data.article.categoryId)
+      //.orderBy("articleId").limit(8)
+      .get();
+    data.article.relatedArticles = [];
+    relatedArticlesDoc.forEach(doc => {
+      if (doc.id !== data.article.articleId) data.article.relatedArticles.push(doc.data());
+    });
+  }
 
   if (articleId === "404") res.status(404);
   res.render("./page-root.ejs", { data });

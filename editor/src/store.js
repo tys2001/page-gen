@@ -16,7 +16,6 @@ export default {
     const storageRef = firebase.storage().ref();
     const obj = {
       articles: [],
-      categories: [],
       menu: [],
       media: [],
       setting: {},
@@ -36,39 +35,6 @@ export default {
       async deleteArticle(data) {
         await firestore.collection("articles").doc(data.articleId).delete();
         this.loadArticles();
-      },
-      async loadCategories() {
-        const docs = await firestore.collection("categories").get();
-        this.categories = [];
-        docs.forEach(doc => {
-          const data = doc.data();
-          this.categories.push(data);
-          this.categoryDict[doc.id] = data;
-        });
-      },
-      async addCategory(data) {
-        await firestore.collection("categories").doc(data.categoryId).set(data);
-        this.loadArticles();
-      },
-      async deleteCategory(data) {
-        await firestore.collection("categories").doc(data.categoryId).delete();
-        this.loadArticles();
-      },
-      async loadMenu() {
-        const docs = await firestore.collection("menu").orderBy("sortNo").get();
-        this.menu = [];
-        docs.forEach(doc => {
-          const data = doc.data();
-          this.menu.push(data);
-        });
-      },
-      async addMenu(data) {
-        await firestore.collection("menu").doc(data.menuId).set(data);
-        this.loadMenu();
-      },
-      async deleteMenu(data) {
-        await firestore.collection("menu").doc(data.menuId).delete();
-        this.loadMenu();
       },
       async loadSetting() {
         const doc = await firestore.collection("settings").doc("setting").get();
@@ -114,8 +80,6 @@ export default {
     };
     await Promise.all([
       obj.loadArticles(),
-      obj.loadCategories(),
-      obj.loadMenu(),
       obj.loadSetting(),
       obj.loadMedia()
     ]);

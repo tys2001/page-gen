@@ -1,17 +1,20 @@
 <template>
   <div>
-    <div class="thumbnail" :style="{ backgroundImage: `url(${value})` }" />
+    <div class="thumbnail-selected" :style="{ backgroundImage: `url(${value})` }" />
     <b-button @click="onClickOpen">select</b-button>
-    <b-modal ref="modal" @ok="onClickOk" size="xl">
+    <b-modal ref="modal" @ok="onClickOk" scrollable size="lg">
       <div class="thumbnails-box">
         <div
           v-for="item in store.media"
           :key="item.fileName"
-          class="thumbnail"
-          :style="{ backgroundImage: `url(${item.storageUrl})` }"
+          class="thumbnail-outline"
           :selected="selectedMedia === item"
           @click="selectedMedia = item"
-        />
+        >
+          <div class="thumbnail" :style="{ backgroundImage: `url(${item.storageUrl})` }">
+            <b-aspect aspect="1:1"></b-aspect>
+          </div>
+        </div>
       </div>
     </b-modal>
   </div>
@@ -44,7 +47,7 @@ export default {
 .image-selected {
   max-width: 100%;
 }
-.thumbnail {
+.thumbnail-selected {
   width: 100px;
   height: 100px;
   background-color: lightgray;
@@ -54,7 +57,19 @@ export default {
   display: inline-block;
   margin: 5px;
 }
-.thumbnail[selected] {
-  border: 2px solid red;
+.thumbnail-outline {
+  width: 25%;
+  display: inline-block;
+}
+.thumbnail {
+  width: calc(100% - 10px);
+  background-color: lightgray;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 5px;
+}
+.thumbnail-outline[selected] {
+  background-color: red;
 }
 </style>
